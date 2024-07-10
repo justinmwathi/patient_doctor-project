@@ -1,27 +1,124 @@
+<<<<<<< HEAD
 from flask import Flask, request, make_response
 from flask_sqlalchemy import SQLAlchemy
+=======
+#!/usr/bin/env python3
+import os
+from flask import Flask, request, make_response, session, jsonify
+>>>>>>> 1c9cefba9724d704615c9bba8f6b68fc4e011fd9
 from flask_migrate import Migrate
-from flask_restful import Api, Resource
 from flask_cors import CORS
+<<<<<<< HEAD
 from datetime import datetime
 from models import Doctor, Patient, Appointment,db
+=======
+from flask_restful import Api, Resource
+ 
+from flask_bcrypt import Bcrypt
+
+>>>>>>> 1c9cefba9724d704615c9bba8f6b68fc4e011fd9
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hospital.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact=False
+app.secret_key = os.urandom(24)
+bcrypt = Bcrypt(app)
 
+<<<<<<< HEAD
 app.json.compact = False
 
 migrate = Migrate(app, db)
 
+=======
+api = Api(app)
+from models import db, Doctor, Patient, Appointment, User
+>>>>>>> 1c9cefba9724d704615c9bba8f6b68fc4e011fd9
 db.init_app(app)
+migrate = Migrate(app, db)
 
+@app.before_request
+def check_login():
+    user_id = session.get('user_id')
+    if user_id is None\
+        and request.endpoint != 'index'\
+        and request.endpoint != 'login'\
+        and request.endpoint != 'logout'\
+        and request.endpoint != 'register' \
+        and request.endpoint != 'check_session':
+        return{"error":"unauthorized access"},401
+# Resources
+class Login(Resource):
+    def post(self):
+        data = request.get_json()
+        user_name = data['user_name']
+        password = data['password']
+        
+        user = User.query.filter_by(user_name=user_name).first()
+
+        if user and user.authenticate(password):
+            session['user_id'] = user.id
+            welcome_message = f"Welcome {user.user_name}"
+            return {
+                'message': welcome_message,
+                'id': user.id,
+                'user_name': user.user_name,
+                'role': user.role
+            }, 200
+
+        return {"error": "Invalid username or password"}, 401
+
+class Register(Resource):
+    def post(self):
+        data = request.get_json()
+        user_name = data['user_name']
+        password = data['password']
+        role = data['role']
+
+        if not user_name or not password or not role:
+            return {'message': 'Username, password, and role are required'}, 400
+
+        if role not in ['admin', 'doctor', 'patient']:
+            return {'message': 'Invalid role specified'}, 400
+
+        if User.query.filter_by(user_name=user_name).first():
+            return {'message': 'User already exists'}, 400
+
+        new_user = User(user_name=user_name, role=role)
+        new_user.set_password(password)  # Set the password using the custom method
+        db.session.add(new_user)
+        db.session.commit()
+
+        return {'message': 'User registered successfully'}, 201
+
+class CheckSession(Resource):
+    def get(self):
+        user_id = session.get('user_id')
+
+        if not user_id:
+            return jsonify({"error": "No active session"}), 401
+
+        user = User.query.get(user_id)
+
+        if user:
+            return jsonify(user.to_dict()), 200
+        return jsonify({"error": "User not found"}), 404
+
+class Logout(Resource):
+    def post(self):
+        session.pop('user_id', None)
+        session.pop('role', None)
+        return jsonify({"message": "Logout successful"})
+
+<<<<<<< HEAD
 
 # Import models after db initialization
 
 
 # API setup
 api = Api(app)
+=======
+>>>>>>> 1c9cefba9724d704615c9bba8f6b68fc4e011fd9
 
 # Index Resource
 class Index(Resource):
@@ -163,12 +260,16 @@ class AppointmentByID(Resource):
             return {"error": "Appointment not found"}, 404
 
 # Add resources to API
-api.add_resource(Index, '/')
-api.add_resource(Doctors, '/doctors')
+api.add_resource(Register, '/register', endpoint='register')
+api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(CheckSession, '/check_session', endpoint='check-session')
+api.add_resource(Logout, '/logout', endpoint='logout')
+api.add_resource(Index, '/', endpoint='index')
+api.add_resource(Doctors, '/doctors', endpoint='doctors')
 api.add_resource(DoctorByID, '/doctors/<int:doctor_id>')
-api.add_resource(Patients, '/patients')
+api.add_resource(Patients, '/patients', endpoint='patients')
 api.add_resource(PatientByID, '/patients/<int:patient_id>')
-api.add_resource(Appointments, '/appointments')
+api.add_resource(Appointments, '/appointments', endpoint='appointments')
 api.add_resource(AppointmentByID, '/appointments/<int:appointment_id>')
 
 if __name__ == '__main__':
