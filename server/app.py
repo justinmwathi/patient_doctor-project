@@ -1,121 +1,96 @@
-#!/usr/bin/env python3
-
 from flask import Flask, request, make_response
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_cors import CORS
-
-from models import db, Doctor, Patient, Appointment
-
+from datetime import datetime
+from models import Doctor, Patient, Appointment,db
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///models.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hospital.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.json.compact = False
+
 migrate = Migrate(app, db)
+
 db.init_app(app)
 
+
+# Import models after db initialization
+
+
+# API setup
 api = Api(app)
 
 # Index Resource
 class Index(Resource):
-  
-    # Returns a welcome message for the Patient-Doctor Appointment System.
     def get(self):
-        response_dict = {
-            "message": "Welcome to the Patient-Doctor Appointment System!"
-        }
-        response = make_response(response_dict, 200)
-        return response
+        return {"message": "Welcome to the Patient-Doctor Appointment System!"}, 200
 
 # Doctors Resource
 class Doctors(Resource):
-    # Returns a list of all doctors.
     def get(self):
-        response_dict_list = [doctor.to_dict() for doctor in Doctor.query.all()]
-        response = make_response(response_dict_list, 200)
-        return response
-# Adds a new doctor.
+        doctors = Doctor.query.all()
+        response_dict_list = [doctor.to_dict() for doctor in doctors]
+        return response_dict_list, 200
+
     def post(self):
-        new_doctor = Doctor(
-            name=request.form.get('name'),
-            specialization=request.form.get('specialization')
-        )
+        data = request.get_json()
+        new_doctor = Doctor(name=data['name'], speciality=data['speciality'])
         db.session.add(new_doctor)
         db.session.commit()
-        response_dict = new_doctor.to_dict()
-        response = make_response(response_dict, 201)
-        return response
+        return new_doctor.to_dict(), 201
 
-# DoctorByID Resource
 class DoctorByID(Resource):
-  
-        # Retrieves details of a specific doctor by ID.
     def get(self, doctor_id):
         doctor = Doctor.query.get(doctor_id)
         if doctor:
-            response_dict = doctor.to_dict()
-            response = make_response(response_dict, 200)
+            return doctor.to_dict(), 200
         else:
-            response = make_response({"error": "Doctor not found"}, 404)
-        return response
-# Updates details of a specific doctor by ID.
+            return {"error": "Doctor not found"}, 404
+
     def put(self, doctor_id):
         doctor = Doctor.query.get(doctor_id)
         if doctor:
             data = request.get_json()
             doctor.name = data.get('name', doctor.name)
-            doctor.specialization = data.get('specialization', doctor.specialization)
+            doctor.speciality = data.get('speciality', doctor.speciality)
             db.session.commit()
-            response_dict = doctor.to_dict()
-            response = make_response(response_dict, 200)
+            return doctor.to_dict(), 200
         else:
-            response = make_response({"error": "Doctor not found"}, 404)
-        return response
-# Deletes a specific doctor by ID.
+            return {"error": "Doctor not found"}, 404
+
     def delete(self, doctor_id):
         doctor = Doctor.query.get(doctor_id)
         if doctor:
             db.session.delete(doctor)
             db.session.commit()
-            response = make_response({"message": "Doctor deleted successfully"}, 200)
+            return {"message": "Doctor deleted successfully"}, 200
         else:
-            response = make_response({"error": "Doctor not found"}, 404)
-        return response
+            return {"error": "Doctor not found"}, 404
 
 # Patients Resource
 class Patients(Resource):
-    
-    # Returns a list of all patients.
     def get(self):
-        response_dict_list = [patient.to_dict() for patient in Patient.query.all()]
-        response = make_response(response_dict_list, 200)
-        return response
-# Adds a new patient.
+        patients = Patient.query.all()
+        response_dict_list = [patient.to_dict() for patient in patients]
+        return response_dict_list, 200
+
     def post(self):
-        new_patient = Patient(
-            name=request.form.get('name'),
-            age=request.form.get('age'),
-            gender=request.form.get('gender')
-        )
+        data = request.get_json()
+        new_patient = Patient(name=data['name'], age=data['age'], gender=data['gender'])
         db.session.add(new_patient)
         db.session.commit()
-        response_dict = new_patient.to_dict()
-        response = make_response(response_dict, 201)
-        return response
+        return new_patient.to_dict(), 201
 
-# PatientByID Resource
 class PatientByID(Resource):
-  
-#     Updates details of a specific patient by ID
     def get(self, patient_id):
         patient = Patient.query.get(patient_id)
         if patient:
-            response_dict = patient.to_dict()
-            response = make_response(response_dict, 200)
+            return patient.to_dict(), 200
         else:
-            response = make_response({"error": "Patient not found"}, 404)
-        return response
+            return {"error": "Patient not found"}, 404
 
     def put(self, patient_id):
         patient = Patient.query.get(patient_id)
@@ -123,84 +98,70 @@ class PatientByID(Resource):
             data = request.get_json()
             patient.name = data.get('name', patient.name)
             patient.age = data.get('age', patient.age)
+            patient.gender = data.get('gender', patient.gender)
             db.session.commit()
-            response_dict = patient.to_dict()
-            response = make_response(response_dict, 200)
+            return patient.to_dict(), 200
         else:
-            response = make_response({"error": "Patient not found"}, 404)
-        return response
-#  Deletes a specific patient by ID.
+            return {"error": "Patient not found"}, 404
+
     def delete(self, patient_id):
         patient = Patient.query.get(patient_id)
         if patient:
             db.session.delete(patient)
             db.session.commit()
-            response = make_response({"message": "Patient deleted successfully"}, 200)
+            return {"message": "Patient deleted successfully"}, 200
         else:
-            response = make_response({"error": "Patient not found"}, 404)
-        return response
+            return {"error": "Patient not found"}, 404
 
 # Appointments Resource
 class Appointments(Resource):
-    
-    #  Returns a list of all appointments.
     def get(self):
-        response_dict_list = [appointment.to_dict() for appointment in Appointment.query.all()]
-        response = make_response(response_dict_list, 200)
-        return response
-#  Adds a new appointment.
+        appointments = Appointment.query.all()
+        response_dict_list = [appointment.to_dict() for appointment in appointments]
+        return response_dict_list, 200
+
     def post(self):
-        
+        data = request.get_json()
         new_appointment = Appointment(
-            doctor_id=request.form('doctor_id'),
-            patient_id=request.form('patient_id'),
-            date=request.form.get('date'),
-            time=request.form.get('time')
+            doctor_id=data['doctor_id'],
+            patient_id=data['patient_id'],
+            appointment_date=datetime.utcnow(),
+            status=data.get('status', 'Scheduled')
         )
         db.session.add(new_appointment)
         db.session.commit()
-        response_dict = new_appointment.to_dict()
-        response = make_response(response_dict, 201)
-        return response
+        return new_appointment.to_dict(), 201
 
-# AppointmentByID Resource
 class AppointmentByID(Resource):
-    
-#  Retrieves details of a specific appointment by ID.
     def get(self, appointment_id):
         appointment = Appointment.query.get(appointment_id)
         if appointment:
-            response_dict = appointment.to_dict()
-            response = make_response(response_dict, 200)
+            return appointment.to_dict(), 200
         else:
-            response = make_response({"error": "Appointment not found"}, 404)
-        return response
-# Updates details of a specific appointment by ID.
+            return {"error": "Appointment not found"}, 404
+
     def put(self, appointment_id):
         appointment = Appointment.query.get(appointment_id)
         if appointment:
             data = request.get_json()
             appointment.doctor_id = data.get('doctor_id', appointment.doctor_id)
             appointment.patient_id = data.get('patient_id', appointment.patient_id)
-            appointment.date = data.get('date', appointment.date)
-            appointment.time = data.get('time', appointment.time)
+            appointment.appointment_date = data.get('appointment_date', appointment.appointment_date)
+            appointment.status = data.get('status', appointment.status)
             db.session.commit()
-            response_dict = appointment.to_dict()
-            response = make_response(response_dict, 200)
+            return appointment.to_dict(), 200
         else:
-            response = make_response({"error": "Appointment not found"}, 404)
-        return response
-# Deletes a specific appointment by ID.
+            return {"error": "Appointment not found"}, 404
+
     def delete(self, appointment_id):
         appointment = Appointment.query.get(appointment_id)
         if appointment:
             db.session.delete(appointment)
             db.session.commit()
-            response = make_response({"message": "Appointment deleted successfully"}, 200)
+            return {"message": "Appointment deleted successfully"}, 200
         else:
-            response = make_response({"error": "Appointment not found"}, 404)
-        return response
-    
+            return {"error": "Appointment not found"}, 404
+
 # Add resources to API
 api.add_resource(Index, '/')
 api.add_resource(Doctors, '/doctors')
@@ -212,3 +173,4 @@ api.add_resource(AppointmentByID, '/appointments/<int:appointment_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+
