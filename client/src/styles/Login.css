@@ -1,0 +1,63 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0; /* Light gray background */
+  }
+  
+  .card {
+    width: 320px;
+    padding: 20px;
+    background-color: #ffffff; /* White background */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    border-radius: 8px;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333333; /* Dark gray text */
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #dddddd; /* Light gray border */
+    border-radius: 4px;
+  }
+  
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    outline: none;
+    border-color: #82b440; /* Custom focus color */
+  }
+  
+  button {
+    padding: 10px 15px;
+    background-color: #82b440; /* Green button */
+    color: #ffffff; /* White text */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #6c9e3e; /* Darker green on hover */
+  }
+  
+  .error-message {
+    color: #ff6347; /* Red text for error messages */
+    font-size: 0.875rem;
+    margin-top: 10px;
+    text-align: center;
+  }
+  

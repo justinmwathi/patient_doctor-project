@@ -1,86 +1,64 @@
-.App {
-  text-align: center;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+/* App.css */
+
+/* Global styles */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa; /* Light grey background */
 }
 
-.App-header {
-  background-color: #282c34;
-  width: 100%;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-nav {
-  display: flex;
-  gap: 20px;
+.dashboard {
+  background-color: #ffffff; /* White dashboard background */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
   margin-bottom: 20px;
 }
 
-.App-link {
-  color: #61dafb;
-  text-decoration: none;
-  padding: 10px 20px;
-  background-color: #20232a;
-  border-radius: 5px;
-}
-
-.App-link:hover {
-  background-color: #61dafb;
-  color: #20232a;
-}
-
-.App-content {
-  padding: 20px;
-}
-
-.form-container {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.card {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-form label, form input {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-form input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-form button {
+button {
   background-color: #007bff;
   color: #fff;
   border: none;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 10px 20px;
   cursor: pointer;
-  width: 100%;
+  border-radius: 4px;
 }
 
-form button:hover {
+button:hover {
   background-color: #0056b3;
 }
 
+input[type="text"],
+input[type="password"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
+input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
-
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
