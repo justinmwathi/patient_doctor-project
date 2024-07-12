@@ -6,7 +6,7 @@ function Login() {
   const [user_name, setUser_name] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // React Router's useNavigate hook for navigation
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,13 +32,16 @@ function Login() {
         console.log('Logged in successfully:', userData);
         setError('');
 
+        // Store token in localStorage
+        localStorage.setItem('token', userData.token);
+
         // Redirect based on user role
         if (userData.role === 'patient') {
-          navigate('/patient/dashboard');
+          navigate('/patient-dashboard');
         } else if (userData.role === 'doctor') {
-          navigate('/doctor/dashboard');
+          navigate('/doctor-dashboard');
         } else if (userData.role === 'admin') {
-          navigate('/admin/dashboard');
+          navigate('/admin-dashboard');
         } else {
           setError('Invalid role received from server');
         }
@@ -83,4 +86,5 @@ function Login() {
 }
 
 export default Login;
+
 
