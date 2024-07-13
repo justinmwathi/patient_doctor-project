@@ -28,12 +28,14 @@ function Login() {
         return response.json();
       })
       .then(userData => {
+        // Log token for debugging
+        console.log('Token:', userData.access_token);
+
         // Handle successful login
-        console.log('Logged in successfully:', userData);
         setError('');
 
         // Store token in localStorage
-        localStorage.setItem('token', userData.token);
+        localStorage.setItem('token', userData.access_token);
 
         // Store user ID if needed
         localStorage.setItem('loggedInUserId', userData.user_id);

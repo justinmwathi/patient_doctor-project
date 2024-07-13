@@ -5,6 +5,9 @@ function Register() {
   const [user_name, setUser_name] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('patient'); // Default role
+  const [specialization, setSpecialization] = useState('');
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 

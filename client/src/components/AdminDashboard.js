@@ -79,9 +79,9 @@ const AdminDashboard = () => {
                     <Card key={doctor.id} className="doctor-card">
                         <Card.Img variant="top" src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbvcveHjjyK1d3v5sNUNfqaz-xAbJLsFyVyQ&s'} />
                         <Card.Body>
-                            <Card.Title>{doctor.name}</Card.Title>
+                            <Card.Title>Name:{doctor.name}</Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">
-                                {doctor.specialization}
+                                Specialization:{doctor.specialization}
                             </Card.Subtitle>
                             <Button variant="primary" onClick={() => deleteDoctor(doctor.id)}>Delete Doctor</Button>
                         </Card.Body>
