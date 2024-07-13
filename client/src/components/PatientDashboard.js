@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AppointmentForm from './AppointmentsForm';
-
+import '../styles/PatientsDashboard.css';
 function PatientDashboard() {
     const [appointments, setAppointments] = useState([]);
     const [doctors, setDoctors] = useState([]);
@@ -74,6 +74,27 @@ function PatientDashboard() {
             <h3>Schedule an Appointment</h3>
             <AppointmentForm doctors={doctors} handleScheduleAppointment={handleScheduleAppointment} />
             {error && <p className="error-message">{error}</p>}
+            <h3>Appointments</h3>
+            <table className="appointments-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Doctor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {appointments.map(appointment => (
+                        <tr key={appointment.id}>
+                            <td>{appointment.date}</td>
+                            <td>{appointment.time}</td>
+                            <td>{appointment.doctor.name}</td>
+                            <td>{appointment.status}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }

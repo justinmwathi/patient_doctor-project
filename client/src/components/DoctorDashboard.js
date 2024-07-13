@@ -1,85 +1,103 @@
 import React, { useState, useEffect } from 'react';
-import './Doctors.css';
 
 const DoctorDashboard = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [name, setName] = useState('');
-  const [specialty, setSpecialty] = useState('');
-  const [requestSubmitted, setRequestSubmitted] = useState(false);
+    const [patients, setPatients] = useState([]);
+    const [selectedPatient, setSelectedPatient] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
 
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await fetch('http://localhost:5555/session', {
-          method: 'GET',
-          credentials: 'include', // Include credentials for CORS
-        });
-        if (response.ok) {
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.error('Error checking session:', error);
-        setIsLoggedIn(false);
-      }
+    useEffect(() => {
+        fetchPatients(); // Fetch patients when component mounts
+    }, []);
+
+    const fetchPatients = () => {
+        fetch('/patients', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                setPatients(data); // Update patients state with fetched data
+            } else {
+                console.error('Invalid data format for patients:', data);
+            }
+        })
+        .catch(error => console.error('Error fetching patients:', error));
     };
 
-    checkSession();
-  }, []);
+    const fetchPatientDetails = (patientId) => {
+        fetch(`/patients/${patientId}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => setSelectedPatient(data))
+        .catch(error => console.error('Error fetching patient details:', error));
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:5555/registration-requests', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, role: 'doctor', specialty }),
-      });
-      if (response.ok) {
-        setRequestSubmitted(true);
-      }
-    } catch (error) {
-      console.error('Error submitting registration request:', error);
-    }
-  };
+    const handleSearch = () => {
+        fetch(`/patients/search?q=${searchQuery}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => setSearchResults(data))
+        .catch(error => console.error('Error searching patients:', error));
+    };
 
-  return (
-    <div className="doctor-dashboard">
-      <h2>Doctor Dashboard</h2>
-      {isLoggedIn ? (
-        requestSubmitted ? (
-          <p>Registration request submitted. Please wait for approval.</p>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label>Name:</label>
-              <input
+    return (
+        <div>
+            <h1>Doctor Dashboard</h1>
+            
+            <h2>Search Patients</h2>
+            <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Specialty:</label>
-              <input
-                type="text"
-                value={specialty}
-                onChange={(e) => setSpecialty(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit">Submit Registration Request</button>
-          </form>
-        )
-      ) : (
-        <p>Please log in to view your dashboard.</p>
-      )}
-    </div>
-  );
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by patient name"
+            />
+            <button onClick={handleSearch}>Search</button>
+
+            {searchResults.length > 0 && (
+                <div>
+                    <h3>Search Results:</h3>
+                    <ul>
+                        {searchResults.map(patient => (
+                            <li key={patient.id}>
+                                {patient.name} 
+                                <button onClick={() => fetchPatientDetails(patient.id)}>View Details</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            <h2>Assigned Patients</h2>
+            <ul>
+                {patients.map(patient => ( // Ensure patients state is always an array
+                    <li key={patient.id}>
+                        {patient.name}
+                        <button onClick={() => fetchPatientDetails(patient.id)}>View Details</button>
+                    </li>
+                ))}
+            </ul>
+
+            {selectedPatient && (
+                <div>
+                    <h2>Patient Details</h2>
+                    <p>Name: {selectedPatient.name}</p>
+                    <p>Age: {selectedPatient.age}</p>
+                    <p>Gender: {selectedPatient.gender}</p>
+                    <p>Medical History: {selectedPatient.medical_history}</p>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default DoctorDashboard;
+
