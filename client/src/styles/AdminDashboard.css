@@ -1,0 +1,27 @@
+/* AdminDashboard.css */
+
+.admin-dashboard {
+    padding: 20px;
+}
+
+.doctor-card {
+    width: 300px; /* Adjust width as needed */
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-card .card-body {
+    padding: 10px;
+}
+
+.doctor-card .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.doctor-card .card-subtitle {
+    font-size: 1rem;
+    color: #666;
+}

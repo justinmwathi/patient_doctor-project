@@ -35,6 +35,9 @@ function Login() {
         // Store token in localStorage
         localStorage.setItem('token', userData.token);
 
+        // Store user ID if needed
+        localStorage.setItem('loggedInUserId', userData.user_id);
+
         // Redirect based on user role
         if (userData.role === 'patient') {
           navigate('/patient-dashboard');
@@ -86,5 +89,6 @@ function Login() {
 }
 
 export default Login;
+
 
 

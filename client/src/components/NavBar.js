@@ -23,19 +23,7 @@ function NavBar(){
         <li>
             <NavLink to="/login">Login</NavLink>
         </li>
-        <li>
-            <NavLink to="./patient-dashboard">Patient</NavLink>
-        </li>
-        <li>
-            <NavLink to='./doctor-dashboard'>Doctor</NavLink>
-        </li>
-        <li>
-            <NavLink to="./admin-dashboard"> Admin</NavLink>
-        </li>
-        <li>
-            <NavLink to="./logout">Logout</NavLink>
-        </li>
-
+       
     </ul>
     </nav>
     )
