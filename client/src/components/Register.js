@@ -5,17 +5,16 @@ function Register() {
   const [user_name, setUser_name] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('patient'); // Default role
-  const [specialization, setSpecialization] = useState('');
-  const [age, setAge] = useState('');
-  const [gender, setGender] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'user_name') setUser_name(value);
     else if (name === 'password') setPassword(value);
     else if (name === 'role') setRole(value);
+    else if (name === 'email') setEmail(value); // Ensure this correctly updates the email state
   };
 
   const handleSubmit = (e) => {
@@ -25,28 +24,30 @@ function Register() {
     formData.append('user_name', user_name);
     formData.append('password', password);
     formData.append('role', role);
+    formData.append('email', email); // Ensure email is included
 
     fetch('http://localhost:5555/register', {
       method: 'POST',
       body: formData,
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
-          return response.json().then(data => {
+          return response.json().then((data) => {
             throw new Error(data.message || 'Registration failed');
           });
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         setMessage(data.message);
         setError('');
         // Reset form fields
         setUser_name('');
         setPassword('');
+        setEmail('');
         setRole('patient');
       })
-      .catch(error => {
+      .catch((error) => {
         setError(error.message);
         setMessage('');
       });
@@ -71,12 +72,15 @@ function Register() {
           onChange={handleChange}
           required
         />
-        <select
-          name="role"
-          value={role}
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={email}
           onChange={handleChange}
           required
-        >
+        />
+        <select name="role" value={role} onChange={handleChange} required>
           <option value="patient">Patient</option>
           <option value="doctor">Doctor</option>
           <option value="admin">Admin</option>
