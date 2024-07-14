@@ -1,70 +1,146 @@
-# Getting Started with Create React App
+# Doctor-Patient Appointment System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a Doctor-Patient Appointment System built with React and Flask. It enables patients to schedule appointments with doctors, and doctors to manage their appointments and view assigned patients.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **User Authentication**: Secure login for doctors and patients.
+- **Role-based Access**: Different functionalities for doctors and patients.
+- **Appointment Scheduling**: Patients can schedule appointments with doctors.
+- **Doctor Dashboard**: Doctors can view and manage their appointments and assigned patients.
+- **Patient Dashboard**: Patients can view their appointments and doctor details.
 
-### `npm start`
+## Technology Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: React.js
+- **Backend**: Flask (Python)
+- **Database**: SQLAlchemy (ORM for SQL databases)
+- **Authentication**: Flask-JWT-Extended
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Project Structure
 
-### `npm test`
+project_root/
+│
+├── client/ # React frontend
+│ ├── public/ # Public files (index.html, favicon, etc.)
+│ ├── src/ # Source files
+│ ├── components/ # React components
+│ ├── contexts/ # Contexts for global state management
+│ ├── styles/ # CSS styles
+│ ├── App.js # Main App component
+│ ├── index.js # Entry point for React
+│ └── ... # Other files and folders
+│
+├── server/ # Flask backend
+│ ├── app.py # Main Flask application
+│ ├── models.py # Database models
+│ ├── routes.py # API routes
+│ └── ... # Other files and folders
+│
+├── .gitignore # Git ignore file
+├── README.md # Project README file
+├── requirements.txt # Python dependencies
+└── package.json # Node.js dependencies
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Node.js and npm
+- Python 3.x
+- pip
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend Setup
 
-### `npm run eject`
+1. **Clone the repository**:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    ```sh
+    git clone https://github.com/justinmwathi/patient_doctor-project.git
+    cd patient_doctor-project
+    ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. **Set up a virtual environment**:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    ```sh
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. **Install backend dependencies**:
 
-## Learn More
+    ```sh
+    pip install -r requirements.txt
+    ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. **Set up the database**:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    ```sh
+    flask db init
+    flask db migrate
+    flask db upgrade
+    ```
 
-### Code Splitting
+5. **Run the backend server**:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    ```sh
+    flask run
+    ```
 
-### Analyzing the Bundle Size
+### Frontend Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. **Navigate to the client directory**:
 
-### Making a Progressive Web App
+    ```sh
+    cd client
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+2. **Install frontend dependencies**:
 
-### Advanced Configuration
+    ```sh
+    npm install
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+3. **Run the frontend server**:
 
-### Deployment
+    ```sh
+    npm start
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Usage
 
-### `npm run build` fails to minify
+### API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### Authentication
+
+- **Login**: `POST /login`
+- **Logout**: `POST /logout`
+
+#### Doctor Endpoints
+
+- **View Doctor Details**: `GET /doctors/<int:doctor_id>`
+- **Update Doctor Details**: `PUT /doctors/<int:doctor_id>`
+- **Delete Doctor**: `DELETE /doctors/<int:doctor_id>`
+
+#### Patient Endpoints
+
+- **View Patients**: `GET /patients`
+- **View Patient Details**: `GET /patients/<int:patient_id>`
+
+### React Components
+
+#### Doctor Dashboard
+
+- **DoctorDashboard**: Displays doctor details and patients list.
+- **DoctorDetails**: Allows updating and deleting doctor details.
+- **PatientsList**: Lists patients assigned to the doctor.
+
+#### Patient Dashboard
+
+- **PatientDetails**: Displays patient details.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any changes.
+
+
