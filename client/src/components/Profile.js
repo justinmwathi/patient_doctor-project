@@ -3,27 +3,28 @@ import { Link } from 'react-router-dom';
 import '../styles/Profile.css';
 
 function Profile() {
-  // const { userId } = useParams(); // Use this if you're using React Router with URL params
   const user_Id = localStorage.getItem('loggedInUserId'); // Assuming we get the logged-in user's ID from localStorage
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState('');
   const [appointments, setAppointments] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5555/profile/${user_Id}`,
+          ` http://localhost:5555/profile/${user_Id}`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
+        console.log('user is:', data);
         setUser(data);
       } catch (error) {
         console.error('Error fetching user details:', error);
@@ -31,27 +32,7 @@ function Profile() {
       }
     };
 
-    const fetchAppointments = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5555/appointments/profile/${user_Id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        setAppointments(data);
-      } catch (error) {
-        console.error('Error fetching appointments:', error);
-        setError('Failed to fetch appointments');
-      }
-    };
-
     fetchUserDetails();
-    fetchAppointments();
   }, [user_Id]);
 
   const handleUpdate = async (e) => {
@@ -59,8 +40,8 @@ function Profile() {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch(`http://localhost:5555/users/${user_Id}`, {
-        method: 'PUT',
+      const response = await fetch(`http://localhost:5555/profile/${user_Id}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -83,11 +64,15 @@ function Profile() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setUser((prevUser) => ({
       ...prevUser,
       [name]: value,
     }));
   };
+  if (user) {
+    console.log('My user is:', user);
+  }
 
   return (
     <div className="user-profile">
@@ -96,7 +81,7 @@ function Profile() {
         <h2>Details</h2>
         {error && <p className="error">{error}</p>}
         <p>
-          <strong>Name:</strong> {user.username}
+          <strong>username:</strong> {user.user_name}
         </p>
         <p>
           <strong>Email:</strong> {user.email}
@@ -112,8 +97,8 @@ function Profile() {
             Name:
             <input
               type="text"
-              name="name"
-              value={user.username || ''}
+              name="user_name"
+              value={user.user_name || ''}
               onChange={handleChange}
               required
             />
@@ -134,40 +119,6 @@ function Profile() {
           </button>
         </form>
       )}
-      {message && <p className="message">{message}</p>}
-      <div className="appointment-history">
-        <h2>Appointment History</h2>
-        {appointments.map((appointment) => (
-          <div key={appointment.id} className="appointment">
-            <h3>Appointment with {appointment.doctor.name}</h3>
-            <p>
-              <strong>Date:</strong> {appointment.date}
-            </p>
-            <p>
-              <strong>Time:</strong> {appointment.time}
-            </p>
-            <p>
-              <strong>Status:</strong> {appointment.status}
-            </p>
-            <div className="prescriptions">
-              <h4>Prescriptions:</h4>
-              {appointment.prescriptions.map((prescription) => (
-                <div key={prescription.id} className="prescription">
-                  <p>
-                    <strong>Medicine:</strong> {prescription.medicine}
-                  </p>
-                  <p>
-                    <strong>Dosage:</strong> {prescription.dosage}
-                  </p>
-                  <p>
-                    <strong>Instructions:</strong> {prescription.instructions}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
