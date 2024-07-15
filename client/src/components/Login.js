@@ -19,17 +19,18 @@ function Login() {
       method: 'POST',
       body: formData,
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
-          return response.json().then(data => {
+          return response.json().then((data) => {
             throw new Error(data.error || 'Login failed');
           });
         }
         return response.json();
       })
-      .then(userData => {
+      .then((userData) => {
         // Log token for debugging
         console.log('Token:', userData.access_token);
+        console.log(userData);
 
         // Handle successful login
         setError('');
@@ -38,7 +39,7 @@ function Login() {
         localStorage.setItem('token', userData.access_token);
 
         // Store user ID if needed
-        localStorage.setItem('loggedInUserId', userData.user_id);
+        localStorage.setItem('loggedInUserId', userData.user_Id);
 
         // Redirect based on user role
         if (userData.role === 'patient') {
@@ -51,7 +52,7 @@ function Login() {
           setError('Invalid role received from server');
         }
       })
-      .catch(error => {
+      .catch((error) => {
         setError(error.message);
         console.error('Login error:', error);
       });
@@ -91,6 +92,3 @@ function Login() {
 }
 
 export default Login;
-
-
-
