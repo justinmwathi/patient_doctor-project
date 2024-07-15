@@ -32,7 +32,7 @@ To set up the frontend application on your local machine, follow these steps:
                                                                         ``
 
 2. Install Dependencies
-Ensure you have npm installed. Then run:
+Ensure you have npm installed, ``cd client`` ,then run:
 
  bash
        ``npm install
