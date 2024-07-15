@@ -89,7 +89,7 @@
     ]
 
   },
-  "homepage": "https://justinmwathi.github.io/patient_doctor-project",
+  "homepage": "https://justinmwathi.github.io",
   "proxy": "http://localhost:5555",
 
   "devDependencies": {
