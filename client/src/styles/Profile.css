@@ -59,3 +59,7 @@
 .update-link:hover {
   color: #0056b3; /* Darker shade on hover */
 }
+
+.success-message{
+  color:green
+}

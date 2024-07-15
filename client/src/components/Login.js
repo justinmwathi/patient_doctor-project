@@ -6,6 +6,7 @@ function Login() {
   const [user_name, setUser_name] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(''); // New state for success message
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -34,26 +35,31 @@ function Login() {
 
         // Handle successful login
         setError('');
+        setSuccess('Login successful!'); // Set success message
 
         // Store token in localStorage
         localStorage.setItem('token', userData.access_token);
 
-        // Store user ID if needed
+        // Store user ID and user name if needed
         localStorage.setItem('loggedInUserId', userData.user_Id);
+        localStorage.setItem('userName', userData.user_name);
 
         // Redirect based on user role
-        if (userData.role === 'patient') {
-          navigate('/patient-dashboard');
-        } else if (userData.role === 'doctor') {
-          navigate('/doctor-dashboard');
-        } else if (userData.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else {
-          setError('Invalid role received from server');
-        }
+        setTimeout(() => { // Delay navigation to show success message
+          if (userData.role === 'patient') {
+            navigate('/patient-dashboard');
+          } else if (userData.role === 'doctor') {
+            navigate('/doctor-dashboard');
+          } else if (userData.role === 'admin') {
+            navigate('/admin-dashboard');
+          } else {
+            setError('Invalid role received from server');
+          }
+        }, 1000); // Adjust delay time as needed
       })
       .catch((error) => {
         setError(error.message);
+        setSuccess(''); // Clear success message on error
         console.error('Login error:', error);
       });
   };
@@ -86,9 +92,11 @@ function Login() {
         />
         <button type="submit">Login</button>
         {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>} {/* Display success message */}
       </form>
     </div>
   );
 }
 
 export default Login;
+

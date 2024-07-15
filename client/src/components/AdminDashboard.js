@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
 const AdminDashboard = () => {
+  const userName = localStorage.getItem('userName');
   // State to store list of doctors and manage form visibility
   const [doctors, setDoctors] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -60,7 +61,7 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard">
       <h2>Admin Dashboard</h2>
-
+      <h3>Welcome,Admin {userName}!</h3>
       {/* Button to toggle visibility of add doctor form */}
       <button onClick={toggleFormVisibility}>
         {showForm ? 'Hide Add Doctor Form' : 'Add New Doctor'}
