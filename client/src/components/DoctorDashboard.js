@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/DoctorDashboard.css'; // Import your CSS file
+import '../styles/DoctorDashboard.css'; // Import your CSS file
 
 const DoctorDashboard = () => {
-    const [appointments, setAppointments] = useState([]);
-    const [editingAppointment, setEditingAppointment] = useState(null);
-    const [formData, setFormData] = useState({
-        patient_id: '',
-        doctor_id: '',
-        appointment_date: '',
-        appointment_time: ''
-    });
+  const userName = localStorage.getItem('userName');
+  const [appointments, setAppointments] = useState([]);
+  const [editingAppointment, setEditingAppointment] = useState(null);
+  const [formData, setFormData] = useState({
+    patient_id: '',
+    doctor_id: '',
+    appointment_date: '',
+    appointment_time: '',
+  });
 
     useEffect(() => {
         fetch('/appointments')
             .then(response => response.json())
             .then(data => setAppointments(data));
     }, []);
+  useEffect(() => {
+    fetch('http://localhost:5555/appointments')
+      .then((response) => response.json())
+      .then((data) => setAppointments(data));
+  }, []);
 
     const handleEditClick = (appointment) => {
         setEditingAppointment(appointment);
@@ -38,7 +45,7 @@ const DoctorDashboard = () => {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         fetch(`/appointments/${editingAppointment.id}`, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -58,10 +65,11 @@ const DoctorDashboard = () => {
             });
         });
     };
-
+ 
     return (
         <div className="container">
             <h2>Doctor Dashboard</h2>
+            <h3>Welcome Dr.{userName}</h3>
             {editingAppointment && (
                 <form onSubmit={handleFormSubmit}>
                     <div>
@@ -113,6 +121,7 @@ const DoctorDashboard = () => {
             </ul>
         </div>
     );
+  
 };
 
 export default DoctorDashboard;

@@ -1,57 +1,54 @@
-/* DoctorDashboard.css */
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
+.patient-dashboard {
     padding: 20px;
     font-family: Arial, sans-serif;
 }
 
-h1, h2 {
+.patient-dashboard h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.patient-dashboard h3 {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.appointments-table th,
+.appointments-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.appointments-table th {
+    background-color: #f2f2f2;
     color: #333;
 }
 
-input[type="text"] {
-    width: calc(100% - 110px);
-    padding: 10px;
-    margin-right: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.appointments-table tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
-button {
-    padding: 10px 20px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-
-
-li:hover {
+.appointments-table tr:hover {
     background-color: #f1f1f1;
 }
 
-.details {
-    background-color: #fff;
-    padding: 20px;
-    margin-top: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.appointments-table td {
+    color: #333;
 }
 
-.details p {
-    margin: 10px 0;
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.appointment-form {
+    margin-bottom: 20px;
 }

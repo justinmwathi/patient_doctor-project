@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AppointmentForm from './AppointmentsForm';
 import '../styles/PatientsDashboard.css';
 function PatientDashboard() {
+    const userName = localStorage.getItem('userName');
     const [appointments, setAppointments] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [error, setError] = useState('');
@@ -71,6 +72,7 @@ function PatientDashboard() {
 
     return (
         <div className="patient-dashboard">
+            <h2>Welcome, {userName}</h2>
             <h3>Schedule an Appointment</h3>
             <AppointmentForm doctors={doctors} handleScheduleAppointment={handleScheduleAppointment} />
             {error && <p className="error-message">{error}</p>}

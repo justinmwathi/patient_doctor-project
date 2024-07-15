@@ -1,0 +1,65 @@
+.profile-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #ffffff; /* Updated background for better contrast */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+  transition: box-shadow 0.3s ease; /* Smooth shadow transition */
+}
+
+.profile-container:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+}
+
+.profile-container h2 {
+  text-align: center;
+  color: #2c3e50; /* Darker color for better readability */
+  margin-bottom: 20px; /* Added margin for spacing */
+}
+
+.profile-container p {
+  font-size: 16px;
+  margin: 10px 0;
+  color: #34495e; /* Softer text color */
+}
+
+.profile-container strong {
+  color: #2980b9; /* Changed to a blue shade for emphasis */
+}
+
+.profile-container button {
+  display: block;
+  width: 100%;
+  padding: 12px; /* Increased padding for a larger button */
+  margin-top: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px; /* Larger font size */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.profile-container button:hover {
+  background-color: #0056b3; /* Keep existing hover effect */
+}
+
+.update-link {
+  display: inline-block;
+  margin-top: 10px;
+  text-align: center;
+  color: #007bff; /* Color for the update link */
+  text-decoration: none; /* Remove underline */
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.update-link:hover {
+  color: #0056b3; /* Darker shade on hover */
+}
+
+.success-message{
+  color:green
+}
